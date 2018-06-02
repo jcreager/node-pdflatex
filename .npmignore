@@ -1,6 +1,0 @@
-/.vscode
-/src
-/.editorconfig
-/yarn.lock
-/tsconfig.json
-/lib/*.js.map
