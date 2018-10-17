@@ -37,7 +37,7 @@ const createChildEnv = (texInputs: string[] = []) =>
 const createCommand = (options: Options) =>
   [
     options.engine ? options.engine : 'pdflatex',
-    ...(options.shellEscape ? ['-shell-escape'] : []),
+    ...(options.shellEscape ? ['-shell-escape'] : ['-no-shell-escape']),
     '-halt-on-error',
     'texput.tex'
   ].join(' ')
