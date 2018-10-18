@@ -16,7 +16,7 @@ import { readErrorLog } from './readErrorLog'
 export type Options = {
   texInputs?: string[]
   shellEscape?: boolean
-  engine?: string[]
+  engine?: string
   dumpFmt?: string[]
 }
 
@@ -36,7 +36,6 @@ const createChildEnv = (texInputs: string[] = []) =>
   )
 
 const createCommand = (options: Options) =>
-  let options.engine = options.engine ? options.engine : 'pdflatex',
   [
     options.engine,
     ...(options.shellEscape ? ['-shell-escape'] : ['-no-shell-escape']),
@@ -49,6 +48,7 @@ const createCommand = (options: Options) =>
  * Compile LaTeX source
  */
 const compile = async (tempPath: string, options: Options) => {
+  options.engine = options.engine ? options.engine : 'pdflatex'
   try {
     await exec(createCommand(options), {
       cwd: tempPath,
