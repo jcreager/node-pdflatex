@@ -17,6 +17,7 @@ export type Options = {
   texInputs?: string[]
   shellEscape?: boolean
   engine?: string[]
+  dumpFmt?: string[]
 }
 
 /**
@@ -35,9 +36,11 @@ const createChildEnv = (texInputs: string[] = []) =>
   )
 
 const createCommand = (options: Options) =>
+  let options.engine = options.engine ? options.engine : 'pdflatex',
   [
-    options.engine ? options.engine : 'pdflatex',
+    options.engine,
     ...(options.shellEscape ? ['-shell-escape'] : ['-no-shell-escape']),
+    ...(options.dumpFmt ? [`-jobname="${options.dumpFmt}"`, `&${options.engine} texput.tex\\dump`] : []),
     '-halt-on-error',
     'texput.tex'
   ].join(' ')
