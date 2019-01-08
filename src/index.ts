@@ -18,6 +18,7 @@ export type Options = {
   shellEscape?: boolean
   engine?: string
   dumpFmt?: string[]
+  fileName?: string[]
 }
 
 /**
@@ -37,18 +38,17 @@ const createChildEnv = (texInputs: string[] = []) =>
 
 const createCommand = (options: Options) =>
   [
-    options.engine,
+    ...(options.engine? options.engine, 'pdflatex'),
     ...(options.shellEscape ? ['-shell-escape'] : ['-no-shell-escape']),
     ...(options.dumpFmt ? [`-jobname="${options.dumpFmt}"`, `&${options.engine} texput.tex\\dump`] : []),
     '-halt-on-error',
-    'texput.tex'
+    ...(options.fileName? options.fileName : 'texput.tex')
   ].join(' ')
 
 /**
  * Compile LaTeX source
  */
 const compile = async (tempPath: string, options: Options) => {
-  options.engine = options.engine ? options.engine : 'pdflatex'
   try {
     await exec(createCommand(options), {
       cwd: tempPath,
